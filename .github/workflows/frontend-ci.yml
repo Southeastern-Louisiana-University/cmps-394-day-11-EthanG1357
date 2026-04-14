@@ -1,0 +1,27 @@
+name: Frontend CI
+
+on: push
+
+jobs:
+  frontend-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build frontend image
+        run: docker build -t frontend-app ./frontend
+
+      - name: Run frontend container
+        run: docker run -d -p 8081:80 --name frontend frontend-app
+
+      - name: Wait for container startup
+        run: sleep 3
+
+      - name: Test frontend response
+        run: |
+          curl http://localhost:8081 | grep "Hello from the frontend"
+
+      - name: Stop container
+        run: docker stop frontend && docker rm frontend
