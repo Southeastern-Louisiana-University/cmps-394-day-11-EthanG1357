@@ -1,0 +1,20 @@
+name: Frontend CI
+
+on:
+  push:
+    paths:
+      - "ui/**"
+      - "nginx.conf"
+      - ".github/workflows/frontend.yml"
+
+jobs:
+  build-frontend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build nginx image
+        run: |
+          docker build -t my-frontend ./ui

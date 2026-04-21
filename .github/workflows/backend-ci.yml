@@ -1,0 +1,27 @@
+name: Backend CI
+
+on: push
+
+jobs:
+  backend-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build backend image
+        run: docker build -t backend-app ./backend
+
+      - name: Run backend container
+        run: docker run -d -p 8082:8080 --name backend backend-app
+
+      - name: Wait for container startup
+        run: sleep 3
+
+      - name: Test backend response
+        run: |
+          curl http://localhost:8082 | grep "Go backend"
+
+      - name: Stop container
+        run: docker stop backend && docker rm backend
