@@ -1,0 +1,19 @@
+name: Backend CI
+
+on:
+  push:
+    paths:
+      - "api/**"
+      - ".github/workflows/backend.yml"
+
+jobs:
+  build-backend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build API image
+        run: |
+          docker build -t my-backend ./api
